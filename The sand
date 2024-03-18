@@ -1,0 +1,76 @@
+import pygame
+import random
+pygame.init()  
+pygame.display.set_caption("sand")  # sets the window title
+screen = pygame.display.set_mode((1000, 1000))  # creates game screen
+screen.fill((100, 100, 100))
+clock = pygame.time.Clock() #set up clock
+running = True
+
+xPositions = []
+yPositions = []
+
+xpos = 0
+ypos = 550
+mousePos = (xpos, ypos) #variable mousePos stores TWO numbers
+numClicks = 0
+
+
+
+for i in range(50):
+    xPositions.append(random.randrange(0, 1000))
+    yPositions.append(random.randrange(-1000, 0))
+
+
+#----------------------------class Sand------------------------------------------
+class Sand:
+    def __init__(self, x, y):
+        self.xpos = x
+        self.ypos = -y
+    def move(self):
+        self.xpos -= random.randrange(-2, 3) # Left & Right | + = Left | - = Right
+        self.ypos += random.randrange(0, 3) #Up & Down | + = Up | - = Down
+        if self.ypos > 1000:
+            self.ypos = random.randrange(0, 10)
+            self.ypos = 800
+    def draw(self):
+        pygame.draw.circle(screen, (random.randrange(194, 220), random.randrange(178, 204),random.randrange(128, 154)), (self.xpos, self.ypos), 6) #draw sand
+#----------------------------------------------------------------------
+        
+        
+#create a bunch of Sands
+sandBag = []
+for i in range(1000): #Amount
+    sandBag.append(Sand(random.randrange(0, 1000), random.randrange(-1000, 0)))
+
+
+while(1): #omg game lup---------
+    clock.tick(60) #FPS
+       
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = false
+    #physics section----
+    
+    #move sand
+    for i in range(len(sandBag)):
+        sandBag[i].move()
+      
+    if event.type == pygame.MOUSEMOTION: #check if mouse moved
+        mousePos = event.pos #refreshes mouse position
+        print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+                      
+
+    #render section---
+    screen.fill((210, 245, 252))
+    
+    for i in range(len(sandBag)):
+        sandBag[i].draw()
+ 
+    
+    pygame.display.flip()#this actually puts the pixel on the screen
+   
+pygame.quit()
+
+
+
